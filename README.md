@@ -1,5 +1,7 @@
 # SIZIS - Sistem Informasi Zakat, Infaq, Sedekah
 
+![screenshot](public/images/image.png)
+
 SIZIS adalah sebuah aplikasi web yang dibangun dengan Laravel dan FilamentPHP untuk membantu pengelolaan dan pencatatan transaksi Zakat, Infaq, dan Sedekah (ZIS) secara komprehensif. Aplikasi ini dirancang untuk memudahkan manajemen data donatur, penerima manfaat, amil, rekening, serta pencatatan pemasukan dan penyaluran ZIS. Dilengkapi dengan dashboard interaktif dan fitur pelaporan, SIZIS bertujuan untuk menyediakan transparansi dan efisiensi dalam pengelolaan dana umat.
 
 ## Fitur Utama
