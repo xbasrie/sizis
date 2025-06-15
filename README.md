@@ -1,66 +1,116 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SIZIS - Sistem Informasi Zakat, Infaq, Sedekah
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+SIZIS adalah sebuah aplikasi web yang dibangun dengan Laravel dan FilamentPHP untuk membantu pengelolaan dan pencatatan transaksi Zakat, Infaq, dan Sedekah (ZIS) secara komprehensif. Aplikasi ini dirancang untuk memudahkan manajemen data donatur, penerima manfaat, amil, rekening, serta pencatatan pemasukan dan penyaluran ZIS. Dilengkapi dengan dashboard interaktif dan fitur pelaporan, SIZIS bertujuan untuk menyediakan transparansi dan efisiensi dalam pengelolaan dana umat.
 
-## About Laravel
+## Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+* **Manajemen Data Master:**
+    * Pengelolaan data **Donatur** (Pribadi & Instansi).
+    * Pengelolaan data **Penerima Manfaat** beserta kategori penerima (Fakir, Miskin, Yatim, dll.).
+    * Pengelolaan data **Amil** (Petugas ZIS).
+    * Manajemen **Rekening** tujuan (bank, atas nama, nomor rekening).
+    * Pengaturan **Kategori ZIS** (Zakat, Infaq, Sedekah) dan jenis-jenisnya.
+* **Pencatatan Transaksi ZIS:**
+    * Pencatatan detail pemasukan ZIS, termasuk donatur, kategori & jenis ZIS, jumlah uang/beras/jiwa, rekening tujuan, dan amil yang bertugas.
+* **Pencatatan Penyaluran:**
+    * Pencatatan detail penyaluran dana kepada penerima manfaat, termasuk kategori & jenis penyaluran, jumlah uang/beras, dan amil yang menyalurkan.
+* **Dashboard Interaktif:**
+    * Menampilkan ringkasan statistik seperti Total Donasi Terkumpul, Total Dana Tersalurkan, Jumlah Donatur, dan Jumlah Penerima Manfaat.
+    * Grafik visualisasi data pemasukan bulanan dan komposisi kategori ZIS.
+* **Sistem Pelaporan:**
+    * Laporan periodik (bulanan) untuk internal dan donatur.
+    * Laporan tahunan untuk internal.
+    * Fungsi cetak invoice untuk setiap transaksi ZIS.
+* **Admin Panel (FilamentPHP):**
+    * Antarmuka administrasi yang powerful dan mudah digunakan untuk mengelola seluruh data dan fitur di atas.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Teknologi yang Digunakan
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* [Laravel](https://laravel.com/) - Framework PHP untuk aplikasi web.
+* [FilamentPHP](https://filamentphp.com/) - Toolkit untuk membangun aplikasi TALL stack (Tailwind CSS, Alpine.js, Livewire, Laravel).
+* PHP 8.1+
+* MySQL (atau database relasional lainnya)
+* Composer (Manajer dependensi PHP)
+* NPM / Yarn (Manajer paket JavaScript)
+* Vite (Bundler frontend)
 
-## Learning Laravel
+## Instalasi dan Pengaturan
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Ikuti langkah-langkah di bawah ini untuk menjalankan proyek SIZIS secara lokal di komputer Anda:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1.  **Clone Repositori:**
+    ```bash
+    git clone [https://github.com/xbasrie/sizis.git](https://github.com/xbasrie/sizis.git)
+    cd sizis
+    ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2.  **Instal Dependensi Composer:**
+    ```bash
+    composer install
+    ```
 
-## Laravel Sponsors
+3.  **Instal Dependensi NPM dan Kompilasi Aset Frontend:**
+    ```bash
+    npm install
+    npm run dev
+    # Atau untuk produksi: npm run build
+    ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+4.  **Konfigurasi File `.env`:**
+    * Salin file `.env.example` menjadi `.env`.
+        ```bash
+        cp .env.example .env
+        ```
+    * Edit file `.env` dan atur konfigurasi database Anda (DB\_CONNECTION, DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME, DB\_PASSWORD).
+    * Pastikan `APP_URL` diatur dengan benar (misalnya `http://localhost:8000`).
+    * Tambahkan konfigurasi Filament Anda di `.env` (jika berbeda dari default):
+        ```env
+        FILAMENT_PATH=admin # path untuk admin panel, default 'admin'
+        FILAMENT_DOMAIN= # Biarkan kosong jika tidak menggunakan subdomain khusus
+        ```
 
-### Premium Partners
+5.  **Generate Application Key:**
+    ```bash
+    php artisan key:generate
+    ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+6.  **Jalankan Migrasi Database:**
+    ```bash
+    php artisan migrate
+    ```
+    Ini akan membuat tabel-tabel database yang diperlukan.
 
-## Contributing
+7.  **Buat Pengguna Admin Pertama:**
+    Anda bisa membuat user pertama melalui Tinker atau dengan membuat seeder. Untuk contoh cepat, Anda bisa menggunakan `php artisan tinker`:
+    ```php
+    php artisan tinker
+    App\Models\User::create([
+        'name' => 'Admin',
+        'email' => 'admin@example.com',
+        'password' => bcrypt('password'),
+    ]);
+    exit;
+    ```
+    (Ganti `admin@example.com` dan `password` dengan kredensial yang Anda inginkan).
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+8.  **Jalankan Server Lokal:**
+    ```bash
+    php artisan serve
+    ```
 
-## Code of Conduct
+## Penggunaan
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Setelah server berjalan, buka browser Anda dan akses:
 
-## Security Vulnerabilities
+* **Aplikasi Utama:** `http://localhost:8000` (atau port lain yang digunakan Artisan).
+* **Admin Panel Filament:** `http://localhost:8000/admin` (sesuai dengan `FILAMENT_PATH` di `.env` Anda).
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Anda dapat login ke admin panel menggunakan kredensial yang Anda buat di langkah instalasi.
 
-## License
+## Kontribusi
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Kontribusi dipersilakan! Jika Anda menemukan bug, memiliki saran fitur, atau ingin berkontribusi pada kode, silakan buka *issue* atau *pull request* di repositori GitHub ini. Pastikan Anda membaca [Panduan Kontribusi Laravel](https://laravel.com/docs/contributions) dan mematuhi [Kode Etik](https://laravel.com/docs/contributions#code-of-conduct).
+
+## Lisensi
+
+Proyek SIZIS adalah perangkat lunak *open-source* yang dilisensikan di bawah [Lisensi MIT](https://opensource.org/licenses/MIT).
