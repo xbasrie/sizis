@@ -8,11 +8,11 @@ use Filament\Tables;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Card;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
-use Filament\Widgets\StatsOverviewWidget\Card;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\RelationManagers;
 
@@ -37,9 +37,10 @@ class UserResource extends Resource
                             ->required(),
                         TextInput::make('password')
                             ->password()
-                            ->required(fn (Page $livewire): bool => $livewire instanceof CreateRecord) // Wajib diisi hanya saat membuat user baru
-                            ->dehydrated(fn ($state) => filled($state)) // Hanya simpan jika diisi (agar tidak menimpa password saat edit)
-                            ->dehydrateStateUsing(fn ($state) => Hash::make($state)),
+                            ->required(),
+                            //->required(fn (Page $livewire): bool => $livewire instanceof CreateRecord)
+                            //->dehydrated(fn ($state) => filled($state))
+                            //->dehydrateStateUsing(fn ($state) => Hash::make($state)),
                     ])
                     ->columns(2),
             ]);
