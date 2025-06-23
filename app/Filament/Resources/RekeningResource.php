@@ -82,5 +82,11 @@ class RekeningResource extends Resource
             'create' => Pages\CreateRekening::route('/create'),
             'edit' => Pages\EditRekening::route('/{record}/edit'),
         ];
-    }    
+    }
+    
+    public static function canViewAny(): bool
+    {
+        // Hanya izinkan jika user yang login memiliki role 'admin'
+        return auth()->user()->hasRole('admin');
+    }
 }

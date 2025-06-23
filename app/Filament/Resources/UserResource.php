@@ -9,12 +9,14 @@ use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\RelationManagers;
+use Spatie\Permission\Models\Role;
 
 class UserResource extends Resource
 {
@@ -39,6 +41,11 @@ class UserResource extends Resource
                             ->required(),
                         TextInput::make('email')
                             ->required(),
+                        Select::make('roles')
+                            ->options(Role::all()->pluck('name', 'id')) // Hubungkan dengan relasi 'roles'
+                            ->preload()
+                            ->label('Role')
+                            ->required(),
                         TextInput::make('password')
                             ->password()
                             ->required(),
@@ -60,6 +67,8 @@ class UserResource extends Resource
                 TextColumn::make('email')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('roles.name')
+                    ->label('Role'),
                 TextColumn::make('created_at')
                     ->dateTime('d M Y')
                     ->label('Tanggal Dibuat')
@@ -91,5 +100,11 @@ class UserResource extends Resource
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
-    }    
+    }
+    
+    public static function canViewAny(): bool
+    {
+        // Hanya izinkan jika user yang login memiliki role 'admin'
+        return auth()->user()->hasRole('admin');
+    }
 }
