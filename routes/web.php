@@ -28,6 +28,6 @@ Route::get('/laporan/bulanan/{tipe}', [InvoiceController::class, 'laporanBulanan
     ->name('laporan.bulanan');
 
 // Rute untuk Laporan Bulanan & Donatur
-Route::get('/laporan/tahunan/{tipe}', [InvoiceController::class, 'laporanTahunan'])
+Route::get('/laporan/tahunan', [InvoiceController::class, 'laporanTahunan'])
     ->middleware('auth')
     ->name('laporan.tahunan');
