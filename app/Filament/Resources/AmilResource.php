@@ -9,6 +9,7 @@ use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
@@ -36,6 +37,12 @@ class AmilResource extends Resource
                     ->schema([
                         TextInput::make('nama_amil')->required(),
                         TextInput::make('notlp_amil')->label('No. Tlp'),
+                        Select::make('jenis_kelamin')
+                            ->options([
+                                'Laki-laki' => 'Laki-laki',
+                                'Perempuan' => 'Perempuan',
+                            ]),
+                        TextInput::make('alamat')->columnSpanFull(),
                     ])
                     ->columns(2),
             ]);
@@ -49,8 +56,14 @@ class AmilResource extends Resource
                     ->label('Nama Amil')
                     ->sortable()
                     ->searchable(),
+                TextColumn::make('jenis_kelamin')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('notlp_amil')
                     ->label('No. Tlp')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('alamat')
                     ->sortable()
                     ->searchable(),
             ])

@@ -11,5 +11,7 @@ class amil extends Model
         protected $fillable = [
         'nama_amil',
         'notlp_amil',
+        'jenis_kelamin',
+        'alamat',
     ];
 }
