@@ -10,6 +10,8 @@ class EditZIS extends EditRecord
 {
     protected static string $resource = ZISResource::class;
 
+    protected static ?string $title = 'Edit Data ZIS';
+
     protected function getActions(): array
     {
         return [

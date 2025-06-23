@@ -50,11 +50,11 @@
     {{-- TABEL DATA --}}
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div>
-            <h3 class="text-lg font-semibold mb-2">Penerimaan ZIS</h3>
+            <h3 class="text-lg font-semibold mb-2"></h3>
             {{-- Tabel untuk Penerimaan --}}
         </div>
         <div>
-             <h3 class="text-lg font-semibold mb-2">Penyaluran</h3>
+             <h3 class="text-lg font-semibold mb-2"></h3>
              {{-- Tabel untuk Penyaluran --}}
         </div>
     </div>

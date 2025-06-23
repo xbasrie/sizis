@@ -23,9 +23,11 @@ class DonaturResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
-    protected static ?string $navigationGroup = 'Database';
+    protected static ?string $navigationGroup = 'Data Master';
 
     protected static ?string $navigationLabel = 'Data Donatur';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {

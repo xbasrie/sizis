@@ -10,6 +10,8 @@ class EditRekening extends EditRecord
 {
     protected static string $resource = RekeningResource::class;
 
+    protected static ?string $title = 'Edit Rekening';
+
     protected function getActions(): array
     {
         return [

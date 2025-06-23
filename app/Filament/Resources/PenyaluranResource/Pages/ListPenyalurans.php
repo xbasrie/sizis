@@ -10,10 +10,13 @@ class ListPenyalurans extends ListRecords
 {
     protected static string $resource = PenyaluranResource::class;
 
+    protected static ?string $title = 'Data Penyaluran';
+
     protected function getActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Data Penyaluran'),
         ];
     }
 }

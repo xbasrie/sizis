@@ -10,6 +10,8 @@ class EditPenyaluran extends EditRecord
 {
     protected static string $resource = PenyaluranResource::class;
 
+    protected static ?string $title = 'Edit Data Penyaluran';
+
     protected function getActions(): array
     {
         return [

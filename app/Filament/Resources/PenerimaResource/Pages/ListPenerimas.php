@@ -10,10 +10,13 @@ class ListPenerimas extends ListRecords
 {
     protected static string $resource = PenerimaResource::class;
 
+    protected static ?string $title = 'Data Penerima';
+
     protected function getActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Penerima'),
         ];
     }
 }

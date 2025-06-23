@@ -10,6 +10,8 @@ class EditKategoriPenerima extends EditRecord
 {
     protected static string $resource = KategoriPenerimaResource::class;
 
+    protected static ?string $title = 'Edit Kategori Penerima';
+
     protected function getActions(): array
     {
         return [

@@ -10,6 +10,8 @@ class EditPenerima extends EditRecord
 {
     protected static string $resource = PenerimaResource::class;
 
+    protected static ?string $title = 'Edit Data Penerima';
+
     protected function getActions(): array
     {
         return [

@@ -28,7 +28,9 @@ class PenyaluranResource extends Resource
 
     protected static ?string $navigationLabel = 'Penyaluran';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationGroup = 'Transaksi';
+
+    protected static ?int $navigationSort = 11;
 
     public static function form(Form $form): Form
     {

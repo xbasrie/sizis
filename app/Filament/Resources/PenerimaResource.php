@@ -23,9 +23,11 @@ class PenerimaResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
-    protected static ?string $navigationGroup = 'Database';
+    protected static ?string $navigationGroup = 'Data Master';
 
     protected static ?string $navigationLabel = 'Data Penerima';
+
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {

@@ -10,10 +10,13 @@ class ListKategoriZis extends ListRecords
 {
     protected static string $resource = KategoriZisResource::class;
 
+    protected static ?string $title = 'Kategori ZIS';
+
     protected function getActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Kategori ZIS'),
         ];
     }
 }

@@ -10,6 +10,8 @@ class EditDonatur extends EditRecord
 {
     protected static string $resource = DonaturResource::class;
 
+    protected static ?string $title = 'Edit Data Donatur';
+
     protected function getActions(): array
     {
         return [

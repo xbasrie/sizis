@@ -23,6 +23,8 @@ class KategoriZisResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
     protected static ?string $navigationGroup = 'Pengaturan';
+    
+    protected static ?int $navigationSort = 16;
 
     public static function form(Form $form): Form
     {

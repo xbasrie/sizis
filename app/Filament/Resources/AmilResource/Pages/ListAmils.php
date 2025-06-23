@@ -10,10 +10,13 @@ class ListAmils extends ListRecords
 {
     protected static string $resource = AmilResource::class;
 
+    protected static ?string $title = 'Data Amil';
+
     protected function getActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Amil'),
         ];
     }
 }

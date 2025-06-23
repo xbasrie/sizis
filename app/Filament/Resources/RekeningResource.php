@@ -24,7 +24,9 @@ class RekeningResource extends Resource
 
     protected static ?string $navigationGroup = 'Pengaturan';
 
-    protected static ?string $navigationLabel = 'Rekening';
+    protected static ?string $navigationLabel = 'Data Rekening';
+
+    protected static ?int $navigationSort = 17;
 
     public static function form(Form $form): Form
     {

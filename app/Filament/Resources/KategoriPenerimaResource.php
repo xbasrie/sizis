@@ -26,6 +26,8 @@ class KategoriPenerimaResource extends Resource
 
     protected static ?string $navigationLabel = 'Kategori Penerima';
 
+    protected static ?int $navigationSort = 15;
+
     public static function form(Form $form): Form
     {
         return $form

@@ -10,6 +10,8 @@ class EditKategoriZis extends EditRecord
 {
     protected static string $resource = KategoriZisResource::class;
 
+    protected static ?string $title = 'Edit Kategori ZIS';
+
     protected function getActions(): array
     {
         return [

@@ -10,10 +10,13 @@ class ListZIS extends ListRecords
 {
     protected static string $resource = ZISResource::class;
 
+    protected static ?string $title = 'Daftar Transaksi ZIS';
+
     protected function getActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Data ZIS'),
         ];
     }
 }

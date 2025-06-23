@@ -10,6 +10,8 @@ class EditAmil extends EditRecord
 {
     protected static string $resource = AmilResource::class;
 
+    protected static ?string $title = 'Edit Data Amil';
+
     protected function getActions(): array
     {
         return [

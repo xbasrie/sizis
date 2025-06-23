@@ -10,10 +10,13 @@ class ListKategoriPenerimas extends ListRecords
 {
     protected static string $resource = KategoriPenerimaResource::class;
 
+    protected static ?string $title = 'Kategori Penerima';
+
     protected function getActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Kategori Penerima'),
         ];
     }
 }
