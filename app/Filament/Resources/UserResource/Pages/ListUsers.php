@@ -10,7 +10,7 @@ class ListUsers extends ListRecords
 {
     protected static string $resource = UserResource::class;
 
-    protected static ?string $title = 'Data User';
+    protected static ?string $title = 'Manajemen User';
 
     protected function getActions(): array
     {
