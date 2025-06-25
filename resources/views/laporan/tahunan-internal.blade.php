@@ -13,13 +13,16 @@
         .text-right { text-align: right; }
         .kop-surat h1 { font-size: 18px; }
         .kop-surat h2 { font-size: 16px; }
+        .summary-block { border: 1px solid #ccc; padding: 15px; margin-bottom: 25px; background-color: #f8f9fa; border-radius: 5px; }
+        .summary-table { width: 100%; border: none; margin: 0; }
+        .summary-table td { border: none; padding: 4px 0; font-weight: bold; }
         /* Tambahkan style lain dari template "cantik" Anda jika perlu */
     </style>
 </head>
 <body>
     <div class="container">
-        {{-- KOP SURAT (sama seperti sebelumnya) --}}
-        <header class="report-header"> ... </header>
+        {{-- KOP SURAT (diasumsikan sudah benar) --}}
+        {{-- <header class="report-header"> ... </header> --}}
 
         <main>
             <div class="report-title">
@@ -27,89 +30,101 @@
                 <p>Periode Tahun {{ $tahun }}</p>
             </div>
 
-            {{-- ======================== --}}
-            {{-- TABEL PIVOT PEMASUKAN --}}
-            {{-- ======================== --}}
-            <h4>Rekapitulasi Pemasukan ZIS</h4>
+            {{-- BLOK RINGKASAN SALDO --}}
+            <div class="summary-block">
+                <h4>Ringkasan Keuangan Tahun {{ $tahun }}</h4>
+                <table class="summary-table">
+                    <tr><td width="40%">Saldo Awal Tahun</td><td width="5%">:</td><td>Rp {{ number_format($saldo_awal_tahun, 0, ',', '.') }}</td></tr>
+                    <tr><td>Total Pemasukan Setahun</td><td>:</td><td>Rp {{ number_format($total_pemasukan_setahun, 0, ',', '.') }}</td></tr>
+                    <tr><td>Total Pengeluaran Setahun</td><td>:</td><td>Rp {{ number_format($total_pengeluaran_setahun, 0, ',', '.') }}</td></tr>
+                    <tr><td><b>Saldo Akhir Tahun</b></td><td><b>:</b></td><td><b>Rp {{ number_format($saldo_akhir_tahun, 0, ',', '.') }}</b></td></tr>
+                </table>
+            </div>
+
+            {{-- RINCIAN PEMASUKAN PER KATEGORI --}}
+            <h4>Rincian Pemasukan Berdasarkan Kategori</h4>
             <table>
                 <thead>
                     <tr>
-                        <th>Kategori</th>
-                        @foreach($nama_bulan as $bulan)
-                            <th>{{ substr($bulan, 0, 3) }}</th>
-                        @endforeach
-                        <th>Total</th>
+                        <th>Kategori ZIS</th>
+                        <th width="35%">Jumlah Terkumpul</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($pemasukan_pivot as $kategori => $bulanan)
+                    {{-- Diperbaiki: Menggunakan variabel $pemasukan_per_kategori --}}
+                    @forelse($pemasukan_per_kategori as $item)
                         <tr>
-                            <td>{{ $kategori }}</td>
-                            @php $total_per_kategori = 0; @endphp
-                            @foreach($bulanan as $jumlah)
-                                <td class="text-right">{{ $jumlah > 0 ? number_format($jumlah, 0, ',', '.') : '-' }}</td>
-                                @php $total_per_kategori += $jumlah; @endphp
-                            @endforeach
-                            <td class="text-right" style="font-weight: bold;">{{ number_format($total_per_kategori, 0, ',', '.') }}</td>
+                            {{-- Diperbaiki: Menggunakan nama kolom 'nama_kategori' dari query --}}
+                            <td>{{ $item->nama_kategori ?? 'Lainnya' }}</td>
+                            <td class="text-right">Rp {{ number_format($item->total, 0, ',', '.') }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="14" style="text-align:center;">Tidak ada data pemasukan.</td></tr>
+                        <tr><td colspan="2" style="text-align: center;">Tidak ada data.</td></tr>
                     @endforelse
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td><b>TOTAL PER BULAN</b></td>
-                        @foreach($total_pemasukan_per_bulan as $total)
-                            <td class="text-right"><b>{{ number_format($total, 0, ',', '.') }}</b></td>
-                        @endforeach
-                        <td class="text-right"><b>{{ number_format($total_pemasukan_setahun, 0, ',', '.') }}</b></td>
+                        <td style="text-align: right;"><b>TOTAL PEMASUKAN</b></td>
+                        <td class="text-right"><b>Rp {{ number_format($total_pemasukan_setahun, 0, ',', '.') }}</b></td>
                     </tr>
                 </tfoot>
             </table>
 
-            {{-- ========================= --}}
-            {{-- TABEL PIVOT PENYALURAN --}}
-            {{-- ========================= --}}
-            <h4>Rekapitulasi Penyaluran</h4>
-             <table>
+            {{-- RINCIAN PENYALURAN PER KATEGORI --}}
+            <h4>Rincian Penyaluran Berdasarkan Kategori</h4>
+            <table>
                 <thead>
                     <tr>
-                        <th>Kategori</th>
-                        @foreach($nama_bulan as $bulan)
-                            <th>{{ substr($bulan, 0, 3) }}</th>
-                        @endforeach
-                        <th>Total</th>
+                        <th>Kategori Penyaluran</th>
+                        <th width="35%">Jumlah Tersalurkan</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($penyaluran_pivot as $kategori => $bulanan)
+                    {{-- Diperbaiki: Menggunakan variabel $penyaluran_per_kategori --}}
+                    @forelse($penyaluran_per_kategori as $item)
                         <tr>
-                            <td>{{ $kategori }}</td>
-                            @php $total_per_kategori = 0; @endphp
-                            @foreach($bulanan as $jumlah)
-                                <td class="text-right">{{ $jumlah > 0 ? number_format($jumlah, 0, ',', '.') : '-' }}</td>
-                                @php $total_per_kategori += $jumlah; @endphp
-                            @endforeach
-                            <td class="text-right" style="font-weight: bold;">{{ number_format($total_per_kategori, 0, ',', '.') }}</td>
+                            {{-- Diperbaiki: Menggunakan nama kolom 'nama_kategori' dari query --}}
+                            <td>{{ $item->nama_kategori ?? 'Lainnya' }}</td>
+                            <td class="text-right">Rp {{ number_format($item->total, 0, ',', '.') }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="14" style="text-align:center;">Tidak ada data penyaluran.</td></tr>
+                        <tr><td colspan="2" style="text-align: center;">Tidak ada data.</td></tr>
                     @endforelse
                 </tbody>
                 <tfoot>
-                    <tr>
-                        <td><b>TOTAL PER BULAN</b></td>
-                        @foreach($total_penyaluran_per_bulan as $total)
-                            <td class="text-right"><b>{{ number_format($total, 0, ',', '.') }}</b></td>
-                        @endforeach
-                        <td class="text-right"><b>{{ number_format($total_pengeluaran_setahun, 0, ',', '.') }}</b></td>
+                     <tr>
+                        <td style="text-align: right;"><b>TOTAL PENGELUARAN</b></td>
+                        <td class="text-right"><b>Rp {{ number_format($total_pengeluaran_setahun, 0, ',', '.') }}</b></td>
                     </tr>
                 </tfoot>
             </table>
 
-            {{-- Ringkasan Saldo Akhir dan Blok Tanda Tangan (sama seperti sebelumnya) --}}
-            <div class="summary-block"> ... </div>
-            <div class="signature-block"> ... </div>
+            {{-- REKAPITULASI PER BULAN --}}
+            <h4 style="margin-top: 30px;">Rekapitulasi per Bulan</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="5%">No</th>
+                        <th>Bulan</th>
+                        <th width="30%">Total Pemasukan</th>
+                        <th width="30%">Total Pengeluaran</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{-- Diperbaiki: Menggunakan variabel $data_bulanan --}}
+                    @foreach($data_bulanan as $data)
+                        <tr>
+                            <td style="text-align: center;">{{ $loop->iteration }}</td>
+                            <td>{{ $data['bulan'] }}</td>
+                            <td class="text-right">Rp {{ number_format($data['pemasukan'], 0, ',', '.') }}</td>
+                            <td class="text-right">Rp {{ number_format($data['pengeluaran'], 0, ',', '.') }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            
+            {{-- BLOK TANDA TANGAN (sama seperti sebelumnya) --}}
+            {{-- <div class="signature-block"> ... </div> --}}
         </main>
     </div>
     <script> window.print(); </script>

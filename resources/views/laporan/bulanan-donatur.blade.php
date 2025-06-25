@@ -137,7 +137,7 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d F Y') }}</td>
-                            <td>Penerimaan dari: {{ $item->donatur->nama }} ({{ $item->kategori_zis }} - {{ $item->jenis_zis }})</td>
+                            <td>Penerimaan dari: {{ $item->donatur->nama }} ({{ $item->kategoriZis?->display_name ?? 'N/A' }})</td>
                             <td class="text-right">Rp {{ number_format($item->uang, 0, ',', '.') }}</td>
                         </tr>
                     @empty

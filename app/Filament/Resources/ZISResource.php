@@ -65,30 +65,18 @@ class ZISResource extends Resource
                 // Card untuk detail transaksi ZIS
                 Card::make()->schema([
                     // LANGKAH 2.1: Dropdown Kategori ZIS
-                    Select::make('kategori_zis')
-                        ->label('Kategori ZIS')
+                    Select::make('kategori_zis_id')
+                        ->label('Kategori & Jenis ZIS')
                         ->options(
-                            // Mengambil nilai unik dari kolom 'kategori'
-                            KategoriZis::query()->distinct()->pluck('kategori', 'kategori')
+                            // Kita akan membuat daftar pilihan secara manual di sini
+                            KategoriZis::all()->mapWithKeys(function ($item) {
+                                // Kunci array adalah ID, nilainya adalah teks gabungan dari accessor
+                                // Kita panggil accessor 'display_name' di sini, di level PHP
+                                return [$item->id => $item->display_name];
+                            })
                         )
-                        ->reactive() // PENTING: Membuatnya reaktif
-                        ->required(),
-
-                    // LANGKAH 2.2: Dropdown Jenis ZIS (Dependent)
-                    Select::make('jenis_zis')
-                        ->label('Jenis ZIS')
-                        ->options(function (callable $get) {
-                            // $get('kategori_zis') akan mengambil nilai yang sedang dipilih
-                            $kategori = $get('kategori_zis');
-                            if (!$kategori) {
-                                // Jika belum ada kategori yang dipilih, dropdown jenis akan kosong
-                                return [];
-                            }
-                            // Ambil jenis yang sesuai dengan kategori yang dipilih
-                            return KategoriZis::query()
-                                    ->where('kategori', $kategori)
-                                    ->pluck('jenis', 'jenis');
-                        })
+                        ->searchable()
+                        ->preload()
                         ->required(),
                     
                     // ... sisa field ZIS lainnya
@@ -98,7 +86,8 @@ class ZISResource extends Resource
                     Select::make('rekening_id')
                         ->label('Rekening Tujuan')
                         ->relationship('rekening', 'bank') // 'atas_nama' atau 'no_rekening'
-                        ->helperText('Pilih jika pembayaran melalui transfer bank.'),
+                        ->helperText('Pilih jika pembayaran melalui transfer bank.')
+                        ->required(),
                     Select::make('amil_id')
                         ->label('Amil yang Bertugas')
                         ->relationship('amil', 'nama_amil') // 'amil' adalah nama relasi, 'nama_amil' adalah kolom yg ditampilkan
@@ -139,18 +128,12 @@ class ZISResource extends Resource
                     ->sortable(),
                 
                 TextColumn::make('rekening.bank')
-                ->label('Pembayaran')    
-                ->searchable()
-                    ->sortable(),
-                    
-                
-                TextColumn::make('kategori_zis')
-                    ->label('Kategori')
+                    ->label('Pembayaran')    
                     ->searchable()
                     ->sortable(),
-
-                TextColumn::make('jenis_zis')
-                    ->label('jenis')
+                    
+                TextColumn::make('kategoriZis.display_name')
+                    ->label('Kategori/Jenis')
                     ->searchable()
                     ->sortable(),
 
@@ -164,37 +147,49 @@ class ZISResource extends Resource
             ])
             // BAGIAN 2: Menambahkan tombol-tombol aksi untuk setiap baris
             ->actions([
-                ViewAction::make() // Nama defaultnya adalah 'view', bukan 'detail'
-                    ->label('') // Anda bisa ubah labelnya
-                    ->color('gray')
-                    ->mutateRecordDataUsing(function (Model $record) {
-                        // Fungsi ini akan berjalan sebelum modal ditampilkan
-                        $data = $record->toArray();
+                // di dalam ->actions([...])
 
-                        // Cek apakah relasi donatur ada, lalu gabungkan datanya
-                        if ($record->donatur) {
-                            $data['donatur.nama'] = $record->donatur->nama;
-                            $data['donatur.alamat'] = $record->donatur->alamat;
-                            $data['donatur.tlp'] = $record->donatur->tlp;
-                        }
+            ViewAction::make()
+                // Anda bisa memberi label 'Detail' atau biarkan kosong agar hanya ikon
+                ->label('')
+                ->icon('heroicon-o-eye')
+                ->color('gray')
+                ->modalHeading('Detail Transaksi ZIS')
+                // Method ini akan "memetakan" data relasi ke nama field yang sederhana
+                ->mutateRecordDataUsing(function (Model $record): array {
+                    $data = $record->toArray();
 
-                        return $data;
-                    })
-                    ->form([
-                        // Sekarang, field-field ini akan terisi dengan benar
-                        TextInput::make('donatur.nama')->label('Nama Donatur')->disabled(),
-                        TextInput::make('donatur.alamat')->label('Alamat')->disabled(),
-                        TextInput::make('donatur.notlp')->label('No. Telepon')->disabled(),
-                        TextInput::make('kategori_zis')->disabled(),
-                        TextInput::make('jenis_zis')->disabled(),
-                        TextInput::make('jiwa')->disabled(),
-                        TextInput::make('beras')->suffix(' Kg')->disabled(),
-                        TextInput::make('uang')->prefix('Rp ')->disabled(),
-                        TextInput::make('rekening.bank')->label('Pembayaran')->disabled(),
-                        TextInput::make('amil.nama_amil')->label('Amil')->disabled(),
-                        TextInput::make('keterangan')->disabled(),
-                        DateTimePicker::make('created_at')->label('Tanggal Transaksi')->disabled()->displayFormat('d-m-Y H:i'),
-                    ]),
+                    // Ambil data dari relasi yang sudah di-load dan masukkan ke array
+                    // Tanda '?' adalah null-safe operator untuk mencegah error jika relasi kosong
+                    $data['nama_donatur_display'] = $record->donatur?->nama;
+                    $data['notlp_display'] = $record->donatur?->notlp;
+                    $data['alamat_display'] = $record->donatur?->alamat;
+                    $data['nama_amil_display'] = $record->amil?->nama_amil;
+                    
+                    // Menggunakan accessor yang sudah kita buat di model Rekening
+                    $data['rekening_display'] = $record->rekening?->display_name; 
+
+                    // Menggunakan accessor yang sudah kita buat di model KategoriZis
+                    $data['kategori_zis_display'] = $record->kategoriZis?->display_name;
+
+                    return $data;
+                })
+                ->form([
+                    // Sekarang, 'make()' merujuk ke key yang kita buat di atas
+                    TextInput::make('nama_donatur_display')->label('Nama Donatur')->disabled(),
+                    TextInput::make('notlp_display')->label('No. Tlp')->disabled(),
+                    TextInput::make('alamat_display')->label('Alamat')->disabled(),
+                    TextInput::make('rekening_display')->label('Rekening Tujuan')->disabled(),
+                    TextInput::make('nama_amil_display')->label('Amil Bertugas')->disabled(),
+                    TextInput::make('kategori_zis_display')->label('Kategori/Jenis ZIS')->disabled(),
+                    
+                    // Field dari tabel z_i_s itu sendiri bisa dipanggil langsung
+                    TextInput::make('uang')->prefix('Rp ')->disabled(),
+                    TextInput::make('beras')->suffix(' Kg')->disabled(),
+                    TextInput::make('jiwa')->disabled(),
+                    TextInput::make('keterangan')->disabled(),
+                    DateTimePicker::make('created_at')->label('Tanggal Transaksi')->disabled()->displayFormat('d-m-Y H:i'),
+                ]),
 
                 EditAction::make()
                     ->label(''),
@@ -214,7 +209,7 @@ class ZISResource extends Resource
 
     public static function getEloquentQuery(): EloquentBuilder
     {
-        return parent::getEloquentQuery()->with(['donatur', 'rekening', 'amil']);
+        return parent::getEloquentQuery()->with(['donatur', 'rekening', 'amil','kategoriZis']);
     }
     
     public static function getRelations(): array

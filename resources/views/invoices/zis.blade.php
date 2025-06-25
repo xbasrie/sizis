@@ -42,12 +42,8 @@
         <h3 style="margin-top: 30px;">Dengan Rincian Sebagai Berikut:</h3>
         <table>
             <tr>
-                <th style="width: 30%;">Kategori</th>
-                <td>{{ $record->kategori_zis }}</td>
-            </tr>
-             <tr>
-                <th>Jenis</th>
-                <td>{{ $record->jenis_zis }}</td>
+                <th>Kategori & Jenis ZIS</th>
+                <td>{{ $record->kategoriZis?->display_name ?? 'Tidak Terdefinisi' }}</td>
             </tr>
             @if($record->uang)
             <tr>

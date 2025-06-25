@@ -14,9 +14,10 @@ class KomposisiKategoriChart extends PieChartWidget
     protected function getData(): array
     {
         $data = ZIS::query()
-            ->groupBy('kategori_zis')
-            ->select('kategori_zis', DB::raw('count(*) as total'))
-            ->pluck('total', 'kategori_zis');
+            ->join('kategori_zis', 'z_i_s.kategori_zis_id', '=', 'kategori_zis.id') // 1. JOIN tabel
+            ->groupBy('kategori_zis.kategori') // 2. Group by nama kategori dari tabel join
+            ->select('kategori_zis.kategori', DB::raw('count(*) as total')) // 3. Select nama kategori
+            ->pluck('total', 'kategori'); // 4. Pluck hasilnya
 
         return [
             'datasets' => [

@@ -15,8 +15,7 @@ class ZIS extends Model
       'alamat',
       'tlp',
       'jenis_donatur',
-      'kategori_zis',
-      'jenis_zis',
+      'kategori_zis_id',
       'jiwa',
       'beras',
       'uang',
@@ -39,5 +38,10 @@ class ZIS extends Model
     public function amil(): BelongsTo
     {
         return $this->belongsTo(Amil::class, 'amil_id');
+    }
+    
+    public function kategoriZis(): BelongsTo
+    {
+        return $this->belongsTo(KategoriZis::class);
     }
 }
