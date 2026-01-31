@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\ZISResource\Pages;
 
 use App\Filament\Resources\ZISResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditZIS extends EditRecord
@@ -12,10 +12,12 @@ class EditZIS extends EditRecord
 
     protected static ?string $title = 'Edit Data ZIS';
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),
         ];
     }
 }
+
+

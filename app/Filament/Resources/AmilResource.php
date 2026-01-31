@@ -5,10 +5,10 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use App\Models\Amil;
 use Filament\Tables;
-use Filament\Resources\Form;
-use Filament\Resources\Table;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -21,7 +21,7 @@ class AmilResource extends Resource
 {
     protected static ?string $model = Amil::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $navigationGroup = 'Data Master';
 
@@ -33,7 +33,7 @@ class AmilResource extends Resource
     {
         return $form
             ->schema([
-                Card::make()
+                Section::make()
                     ->schema([
                         TextInput::make('nama_amil')->required(),
                         TextInput::make('notlp_amil')->label('No. Tlp'),
@@ -74,7 +74,9 @@ class AmilResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
     
@@ -94,3 +96,5 @@ class AmilResource extends Resource
         ];
     }    
 }
+
+

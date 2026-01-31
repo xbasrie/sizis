@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\AmilResource\Pages;
 
 use App\Filament\Resources\AmilResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditAmil extends EditRecord
@@ -12,10 +12,12 @@ class EditAmil extends EditRecord
 
     protected static ?string $title = 'Edit Data Amil';
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),
         ];
     }
 }
+
+

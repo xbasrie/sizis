@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\PenerimaResource\Pages;
 
 use App\Filament\Resources\PenerimaResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreatePenerima extends CreateRecord
@@ -26,3 +26,5 @@ class CreatePenerima extends CreateRecord
         ];
     }
 }
+
+

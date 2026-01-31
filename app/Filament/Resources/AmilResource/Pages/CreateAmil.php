@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\AmilResource\Pages;
 
 use App\Filament\Resources\AmilResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateAmil extends CreateRecord
@@ -26,3 +26,5 @@ class CreateAmil extends CreateRecord
         ];
     }
 }
+
+

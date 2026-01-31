@@ -6,10 +6,10 @@ use Filament\Forms;
 use Filament\Tables;
 use App\Models\Penyaluran;
 use App\Models\KategoriZis;
-use Filament\Resources\Form;
-use Filament\Resources\Table;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
@@ -24,7 +24,7 @@ class PenyaluranResource extends Resource
 {
     protected static ?string $model = Penyaluran::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-paper-airplane';
 
     protected static ?string $navigationLabel = 'Penyaluran';
 
@@ -36,7 +36,7 @@ class PenyaluranResource extends Resource
     {
         return $form
             ->schema([
-                Card::make()
+                Section::make()
                     ->schema([
                         Select::make('penerima_id')
                             ->relationship('penerima', 'nama')
@@ -66,16 +66,11 @@ class PenyaluranResource extends Resource
                             
                         Select::make('kategori_zis_id')
                             ->label('Kategori & Jenis Penyaluran')
-                            //->relationship('kategoriZis', 'display_name') // Gunakan relasi dan accessor baru
                             ->options(
-                                // Kita akan membuat daftar pilihan secara manual di sini
                                 KategoriZis::all()->mapWithKeys(function ($item) {
-                                    // Kunci array adalah ID, nilainya adalah teks gabungan
-                                    // Ini adalah tempat di mana accessor 'display_name' Anda bekerja di level PHP
                                     return [$item->id => $item->kategori . ' - ' . $item->jenis];
                                 })
                             )
-                            //->searchable(['kategori', 'jenis'])
                             ->preload()
                             ->required(),
 
@@ -133,7 +128,9 @@ class PenyaluranResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
     
@@ -153,3 +150,5 @@ class PenyaluranResource extends Resource
         ];
     }    
 }
+
+

@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\PenyaluranResource\Pages;
 
 use App\Filament\Resources\PenyaluranResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditPenyaluran extends EditRecord
@@ -12,10 +12,12 @@ class EditPenyaluran extends EditRecord
 
     protected static ?string $title = 'Edit Data Penyaluran';
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),
         ];
     }
 }
+
+

@@ -24,13 +24,13 @@ class Dashboard extends BaseDashboard
 
 
     // Method ini tetap sama
-    protected function getColumns(): int
+    public function getColumns(): int
     {
         return 2;
     }
 
     // Method ini juga tetap sama
-    protected function getWidgets(): array
+    public function getWidgets(): array
     {
         return [
             StatsOverviewWidget::class,

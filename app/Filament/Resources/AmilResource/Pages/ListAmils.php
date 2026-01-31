@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\AmilResource\Pages;
 
 use App\Filament\Resources\AmilResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListAmils extends ListRecords
@@ -12,7 +12,7 @@ class ListAmils extends ListRecords
 
     protected static ?string $title = 'Data Amil';
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make()
@@ -20,3 +20,5 @@ class ListAmils extends ListRecords
         ];
     }
 }
+
+

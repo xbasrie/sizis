@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\KategoriZisResource\Pages;
 
 use App\Filament\Resources\KategoriZisResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditKategoriZis extends EditRecord
@@ -12,10 +12,12 @@ class EditKategoriZis extends EditRecord
 
     protected static ?string $title = 'Edit Kategori ZIS';
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),
         ];
     }
 }
+
+

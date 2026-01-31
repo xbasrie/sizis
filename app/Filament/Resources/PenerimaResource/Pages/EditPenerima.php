@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\PenerimaResource\Pages;
 
 use App\Filament\Resources\PenerimaResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditPenerima extends EditRecord
@@ -12,10 +12,12 @@ class EditPenerima extends EditRecord
 
     protected static ?string $title = 'Edit Data Penerima';
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),
         ];
     }
 }
+
+

@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Spatie\Permission\Models\Role;
 
@@ -13,7 +13,7 @@ class EditUser extends EditRecord
 
     protected static ?string $title = 'Edit User';
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),
@@ -34,3 +34,5 @@ class EditUser extends EditRecord
         }
     }
 }
+
+

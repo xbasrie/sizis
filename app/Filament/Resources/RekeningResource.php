@@ -5,10 +5,10 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Rekening;
-use Filament\Resources\Form;
-use Filament\Resources\Table;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,7 +20,7 @@ class RekeningResource extends Resource
 {
     protected static ?string $model = Rekening::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-credit-card';
 
     protected static ?string $navigationGroup = 'Pengaturan';
 
@@ -32,7 +32,7 @@ class RekeningResource extends Resource
     {
         return $form
             ->schema([
-                Card::make()
+                Section::make()
                     ->schema([
                         TextInput::make('bank'),
                         TextInput::make('nama'),
@@ -64,7 +64,9 @@ class RekeningResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
     
@@ -86,7 +88,8 @@ class RekeningResource extends Resource
     
     public static function canViewAny(): bool
     {
-        // Hanya izinkan jika user yang login memiliki role 'admin'
         return auth()->user()->hasRole('admin');
     }
 }
+
+

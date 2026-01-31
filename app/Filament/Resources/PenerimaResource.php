@@ -5,10 +5,10 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Penerima;
-use Filament\Resources\Form;
-use Filament\Resources\Table;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -21,7 +21,7 @@ class PenerimaResource extends Resource
 {
     protected static ?string $model = Penerima::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-user';
 
     protected static ?string $navigationGroup = 'Data Master';
 
@@ -33,16 +33,16 @@ class PenerimaResource extends Resource
     {
         return $form
             ->schema([
-                Card::make()
+                Section::make()
                     ->schema([
                         TextInput::make('nama')->required()->label('Nama'),
                         TextInput::make('alamat')->required()->label('Alamat'),
                         TextInput::make('notlp')->required()->label('No. Tlp'),
                         Select::make('kategori_penerima_id')
-                            ->label('Kategori Penerima') // Label yang akan tampil di form
+                            ->label('Kategori Penerima')
                             ->relationship('kategoriPenerima','kategori')
-                            ->searchable() // Membuat dropdown bisa dicari
-                            ->preload()    // Memuat opsi di awal jika datanya tidak terlalu banyak
+                            ->searchable()
+                            ->preload()
                             ->required(),
                     ])
                     ->columns(2),
@@ -74,7 +74,9 @@ class PenerimaResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
     
@@ -94,3 +96,5 @@ class PenerimaResource extends Resource
         ];
     }    
 }
+
+

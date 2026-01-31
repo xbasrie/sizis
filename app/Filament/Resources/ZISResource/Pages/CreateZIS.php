@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\ZISResource\Pages;
 
 use App\Filament\Resources\ZISResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateZIS extends CreateRecord
@@ -26,3 +26,5 @@ class CreateZIS extends CreateRecord
         ];
     }
 }
+
+

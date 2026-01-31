@@ -2,11 +2,11 @@
 
 namespace App\Filament\Widgets;
 
-use Filament\Widgets\BarChartWidget;
+use Filament\Widgets\ChartWidget;
 use App\Models\ZIS;
 use Carbon\Carbon;
 
-class PenerimaanBulananChart extends BarChartWidget
+class PenerimaanBulananChart extends ChartWidget
 {
     protected static ?string $heading = 'Penerimaan ZIS 12 Bulan Terakhir';
 
@@ -42,6 +42,6 @@ class PenerimaanBulananChart extends BarChartWidget
 
     protected function getType(): string
     {
-        return 'bar'; // Tipe grafik adalah 'bar'
+        return 'bar';
     }
 }

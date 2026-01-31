@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\ZISResource\Pages;
 
 use App\Filament\Resources\ZISResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListZIS extends ListRecords
@@ -12,7 +12,7 @@ class ListZIS extends ListRecords
 
     protected static ?string $title = 'Daftar Transaksi ZIS';
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make()
@@ -20,3 +20,5 @@ class ListZIS extends ListRecords
         ];
     }
 }
+
+

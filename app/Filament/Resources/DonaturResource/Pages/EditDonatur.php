@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\DonaturResource\Pages;
 
 use App\Filament\Resources\DonaturResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditDonatur extends EditRecord
@@ -12,10 +12,12 @@ class EditDonatur extends EditRecord
 
     protected static ?string $title = 'Edit Data Donatur';
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),
         ];
     }
 }
+
+

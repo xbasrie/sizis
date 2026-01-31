@@ -5,10 +5,10 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
-use Filament\Resources\Form;
-use Filament\Resources\Table;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -17,12 +17,14 @@ use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\RelationManagers;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Model;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $navigationGroup = 'Pengaturan';
     
@@ -34,7 +36,7 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                Card::make()
+                Section::make()
                     ->schema([
                         TextInput::make('name')
                             ->label('Nama')
@@ -42,16 +44,15 @@ class UserResource extends Resource
                         TextInput::make('email')
                             ->required(),
                         Select::make('roles')
-                            ->options(Role::all()->pluck('name', 'id')) // Hubungkan dengan relasi 'roles'
+                            ->options(Role::all()->pluck('name', 'id'))
                             ->preload()
                             ->label('Role')
                             ->required(),
                         TextInput::make('password')
                             ->password()
-                            ->required(),
-                            //->required(fn (Page $livewire): bool => $livewire instanceof CreateRecord)
-                            //->dehydrated(fn ($state) => filled($state))
-                            //->dehydrateStateUsing(fn ($state) => Hash::make($state)),
+                            ->dehydrateStateUsing(fn ($state) => Hash::make($state))
+                            ->dehydrated(fn ($state) => filled($state))
+                            ->required(fn (string $operation): bool => $operation === 'create'),
                     ])
                     ->columns(2),
             ]);
@@ -82,7 +83,9 @@ class UserResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
     
@@ -104,7 +107,8 @@ class UserResource extends Resource
     
     public static function canViewAny(): bool
     {
-        // Hanya izinkan jika user yang login memiliki role 'admin'
         return auth()->user()->hasRole('admin');
     }
 }
+
+

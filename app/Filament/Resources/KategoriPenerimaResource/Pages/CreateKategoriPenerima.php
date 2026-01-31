@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\KategoriPenerimaResource\Pages;
 
 use App\Filament\Resources\KategoriPenerimaResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateKategoriPenerima extends CreateRecord
@@ -26,3 +26,5 @@ class CreateKategoriPenerima extends CreateRecord
         ];
     }
 }
+
+

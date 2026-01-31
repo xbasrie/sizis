@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\PenerimaResource\Pages;
 
 use App\Filament\Resources\PenerimaResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListPenerimas extends ListRecords
@@ -12,7 +12,7 @@ class ListPenerimas extends ListRecords
 
     protected static ?string $title = 'Data Penerima';
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make()
@@ -20,3 +20,5 @@ class ListPenerimas extends ListRecords
         ];
     }
 }
+
+

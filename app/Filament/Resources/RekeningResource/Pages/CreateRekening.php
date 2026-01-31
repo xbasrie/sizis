@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\RekeningResource\Pages;
 
 use App\Filament\Resources\RekeningResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateRekening extends CreateRecord
@@ -26,3 +26,5 @@ class CreateRekening extends CreateRecord
         ];
     }
 }
+
+

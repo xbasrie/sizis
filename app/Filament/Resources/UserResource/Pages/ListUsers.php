@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListUsers extends ListRecords
@@ -12,7 +12,7 @@ class ListUsers extends ListRecords
 
     protected static ?string $title = 'Manajemen User';
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make()
@@ -20,3 +20,5 @@ class ListUsers extends ListRecords
         ];
     }
 }
+
+

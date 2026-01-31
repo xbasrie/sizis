@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\RekeningResource\Pages;
 
 use App\Filament\Resources\RekeningResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditRekening extends EditRecord
@@ -12,10 +12,12 @@ class EditRekening extends EditRecord
 
     protected static ?string $title = 'Edit Rekening';
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),
         ];
     }
 }
+
+

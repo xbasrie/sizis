@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\KategoriZisResource\Pages;
 
 use App\Filament\Resources\KategoriZisResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateKategoriZis extends CreateRecord
@@ -26,3 +26,5 @@ class CreateKategoriZis extends CreateRecord
         ];
     }
 }
+
+

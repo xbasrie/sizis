@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\DonaturResource\Pages;
 
 use App\Filament\Resources\DonaturResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateDonatur extends CreateRecord
@@ -26,3 +26,5 @@ class CreateDonatur extends CreateRecord
         ];
     }
 }
+
+
