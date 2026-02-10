@@ -25,6 +25,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\FileUpload;
+use Filament\Notifications\Notification;
 
 class ZISResource extends Resource
 {
@@ -72,7 +74,6 @@ class ZISResource extends Resource
                         ->required(),
                     
                     TextInput::make('jiwa')->numeric(),
-                    TextInput::make('beras')->numeric()->suffix('Kg'),
                     TextInput::make('uang')->numeric()->prefix('Rp'),
                     Select::make('rekening_id')
                         ->label('Rekening Tujuan')
@@ -86,7 +87,14 @@ class ZISResource extends Resource
                         ->required()
                         ->preload(),
                     Textarea::make('keterangan')->columnSpanFull(),
-
+                    FileUpload::make('bukti_transfer')
+                        ->label('Bukti Transfer')
+                        ->image()
+                        ->disk('public')
+                        ->directory('bukti_transfer')
+                        ->visibility('public')
+                        ->columnSpanFull()
+                        ->disabled(), // Disabled primarily for View context via Resource form, or make it enabled if Editing is allowed. Let's keep it simple.
                 ])->columns(2),
             ]);
     }
@@ -99,14 +107,22 @@ class ZISResource extends Resource
                     ->label('Tanggal')
                     ->date('d/m/Y')
                     ->searchable()
-                    ->sortable(),
-                TextColumn::make('donatur.nama')
-                    ->label('Nama Donatur')
+                    ->date('d/m/Y')
                     ->searchable()
                     ->sortable(),
-                
-                TextColumn::make('beras')
-                    ->suffix(' Kg')
+                TextColumn::make('payment_status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'pending' => 'warning',
+                        'success' => 'success',
+                        'failed' => 'danger',
+                        default => 'gray',
+                    })
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('nama')
+                    ->label('Nama Donatur')
+                    ->searchable()
                     ->sortable(),
 
                 TextColumn::make('uang')
@@ -121,8 +137,9 @@ class ZISResource extends Resource
                     ->searchable()
                     ->sortable(),
                     
-                TextColumn::make('kategoriZis.display_name')
+                TextColumn::make('kategoriZis.kategori')
                     ->label('Kategori/Jenis')
+                    ->description(fn (ZIS $record) => $record->kategoriZis?->jenis)
                     ->searchable()
                     ->sortable(),
 
@@ -131,6 +148,7 @@ class ZISResource extends Resource
                     ->searchable()
                     ->sortable(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 // ...
             ])
@@ -163,8 +181,39 @@ class ZISResource extends Resource
                         TextInput::make('jiwa')->disabled(),
                         TextInput::make('keterangan')->disabled(),
                         DateTimePicker::make('created_at')->label('Tanggal Transaksi')->disabled()->displayFormat('d-m-Y H:i'),
+                        TextInput::make('keterangan')->disabled(),
+                        DateTimePicker::make('created_at')->label('Tanggal Transaksi')->disabled()->displayFormat('d-m-Y H:i'),
+                        FileUpload::make('bukti_transfer')
+                            ->label('Bukti Transfer')
+                            ->image()
+                            ->disk('public')
+                            ->disabled()
+                            ->columnSpanFull(), 
                     ]),
 
+                Action::make('confirm')
+                     ->label('Konfirmasi')
+                     ->icon('heroicon-o-check-circle')
+                     ->color('success')
+                     ->requiresConfirmation()
+                     ->visible(fn (ZIS $record) => $record->payment_status === 'pending')
+                     ->action(function (ZIS $record) {
+                         $record->update(['payment_status' => 'success']);
+                         
+                         // Update Campaign Funds
+                         if ($record->campaign_id) {
+                             $campaign = \App\Models\Campaign::find($record->campaign_id);
+                             if ($campaign) {
+                                 $campaign->increment('dana_terkumpul', $record->uang);
+                             }
+                         }
+
+                         Notification::make()
+                             ->title('Donasi berhasil dikonfirmasi')
+                             ->success()
+                             ->send();
+                     }),
+                
                 EditAction::make()
                     ->label(''),
                 Action::make('cetak_invoice')

@@ -14,9 +14,11 @@ use App\Http\Controllers\InvoiceController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+use App\Livewire\CampaignList;
+use App\Livewire\CampaignDetail;
+
+Route::get('/', CampaignList::class)->name('home');
+Route::get('/campaign/{slug}', CampaignDetail::class)->name('campaign.detail');
 
 Route::get('/zis/{record}/invoice', [InvoiceController::class, 'printZisInvoice'])
     ->middleware('auth') // Pastikan hanya user yang login bisa akses

@@ -9,19 +9,27 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ZIS extends Model
 {
     use HasFactory;
+
+    protected $table = 'z_i_s';
+
     protected $fillable = [
-      'donatur_id',
-      'nama',
-      'alamat',
-      'tlp',
-      'jenis_donatur',
-      'kategori_zis_id',
-      'jiwa',
-      'beras',
-      'uang',
-      'keterangan',
-      'rekening_id',
-      'amil_id',
+        'order_id',
+        'payment_status',
+        'snap_token',
+        'campaign_id',
+        'donatur_id',
+        'nama',
+        'alamat',
+        'tlp',
+        'jenis_donatur',
+        'kategori_zis_id',
+        'jiwa',
+        'beras',
+        'uang',
+        'keterangan',
+        'rekening_id',
+        'amil_id',
+        'bukti_transfer',
     ];
 
     public function donatur(): BelongsTo
@@ -31,7 +39,6 @@ class ZIS extends Model
 
     public function rekening(): BelongsTo
     {
-        // Menghubungkan 'rekening_id' di tabel z_i_s ke 'id' di tabel rekenings
         return $this->belongsTo(Rekening::class, 'rekening_id');
     }
 
@@ -43,5 +50,10 @@ class ZIS extends Model
     public function kategoriZis(): BelongsTo
     {
         return $this->belongsTo(KategoriZis::class);
+    }
+    
+    public function campaign(): BelongsTo
+    {
+        return $this->belongsTo(Campaign::class);
     }
 }

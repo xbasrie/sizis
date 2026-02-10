@@ -3,208 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <title>Laporan Keuangan ZIS - {{ $bulan_nama }} {{ $tahun }}</title>
-    
-    {{-- BAGIAN 2: MENAMBAHKAN STYLING DENGAN CSS --}}
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
         body {
-            font-family: 'Helvetica', 'Arial', sans-serif;
+            font-family: 'Inter', sans-serif;
+            color: #1f2937;
+            margin: 0;
+            padding: 20px;
             font-size: 12px;
-            color: #333;
+            line-height: 1.5;
         }
+
         .container {
             width: 100%;
+            max-width: 210mm; /* A4 width */
             margin: 0 auto;
+            background: white;
         }
-        .report-header {
+
+        .header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            border-bottom: 3px solid #000;
-            padding-bottom: 10px;
             margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ff7300; /* Lazismu Orange */
         }
-        .logo {
-            width: 120px;
-            height: 90px;
-            margin-right: 20px;
+
+        .logo img {
+            height: 72px;
+            width: auto;
         }
-        .kop-surat {
-            text-align: center;
-            flex-grow: 1;
+
+        .company-info {
+            text-align: right;
         }
-        .kop-surat h1, .kop-surat h2 {
-            margin: 0;
+
+        .company-name {
+            font-weight: 700;
+            font-size: 16px;
+            color: #ff7300;
+            text-transform: uppercase;
         }
-        .kop-surat p {
-            margin: 5px 0 0;
+
+        .company-address {
+            font-size: 10px;
+            color: #6b7280;
         }
+
         .report-title {
             text-align: center;
-            margin-bottom: 25px;
-            text-decoration: underline;
-            font-weight: bold;
-            font-size: 16px;
+            margin-bottom: 30px;
         }
+
+        .report-title h1 {
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin: 0;
+            color: #111827;
+        }
+
+        .report-title p {
+            margin: 5px 0 0;
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #374151;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 5px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
-        th, td {
-            border: 1px solid #777;
-            padding: 8px;
+
+        th {
+            background-color: #f9fafb;
+            color: #374151;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 10px;
+            padding: 10px;
+            border: 1px solid #e5e7eb;
             text-align: left;
         }
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-        .summary-table {
-            width: 50%;
-            border: none;
-        }
-        .summary-table td {
-            border: none;
-        }
-        .text-right {
-            text-align: right;
-        }
-        .signature-block {
-            margin-top: 50px;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-        }
-        .signature {
-            text-align: center;
-            width: 250px;
-        }
-        .signature .name {
-            margin-top: 60px;
-            font-weight: bold;
-            text-decoration: underline;
+
+        td {
+            padding: 10px;
+            border: 1px solid #e5e7eb;
+            color: #111827;
+            vertical-align: top;
         }
 
-        /* CSS KHUSUS UNTUK PRINT */
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .font-bold { font-weight: 700; }
+        .text-gray { color: #6b7280; }
+
+        .summary-box {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+            width: 60%;
+            margin-left: auto;
+        }
+
+        .summary-table {
+            width: 100%;
+            border: none;
+            margin-bottom: 0;
+        }
+
+        .summary-table td {
+            border: none;
+            padding: 5px 0;
+            font-size: 12px;
+        }
+
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+            page-break-inside: avoid;
+        }
+
+        .signature-box {
+            width: 200px;
+            text-align: center;
+        }
+
+        .signature-line {
+            margin-top: 60px;
+            border-top: 1px solid #374151;
+            padding-top: 5px;
+            font-weight: 600;
+        }
+        
         @media print {
-            body { -webkit-print-color-adjust: exact; }
-            .no-print { display: none; }
+            body { padding: 0; margin: 0; }
+            .container { max-width: 100%; }
         }
     </style>
 </head>
 <body>
 
-    @php
-        // Mengubah logo menjadi Base64 agar pasti muncul saat di-print/pdf
-        try {
-            $logoPath = public_path('images/logo.png'); // Ganti dengan nama file logo Anda
-            $logoData = base64_encode(file_get_contents($logoPath));
-            $logoSrc = 'data:image/' . pathinfo($logoPath, PATHINFO_EXTENSION) . ';base64,' . $logoData;
-        } catch (\Exception $e) {
-            $logoSrc = ''; // Biarkan kosong jika logo tidak ditemukan
-        }
-    @endphp
-
     <div class="container">
-        {{-- BAGIAN 1: STRUKTUR HTML BARU --}}
-
-        <header class="report-header">
-            @if($logoSrc)
-                <img src="{{ $logoSrc }}" alt="Logo" class="logo">
-            @endif
-            <div class="kop-surat">
-                <h1>LEMBAGA ZAKAT INFAQ DAN SHODAQOH MUHAMMADIYAH</h1>
-                <h2>UNIT LAYANAN WAGE</h2>
-                <p>Jl Taruna VIII A Kav 266 B Wage, Taman, Sidoarjo | Telp: 0858-8888-1725</p>
+        <div class="header">
+            <div class="logo">
+                <img src="{{ asset('assets/images/logo-lazismu-WAGE-.png') }}" alt="Lazismu Logo">
             </div>
-        </header>
+            <div class="company-info">
+                <div class="company-name">Lazismu Unit Layanan Wage</div>
+                <div class="company-address">
+                    Gedung Pusat Dakwah Muhammadiyah<br>
+                    Jl. Menteng Raya No.62, Jakarta Pusat<br>
+                    Telp: 021-3150400 | Email: info@lazismu.org
+                </div>
+            </div>
+        </div>
 
-        <main>
-            <div class="report-title">LAPORAN KEUANGAN PERIODE {{ $bulan_nama }} {{ $tahun }}</div>
+        <div class="report-title">
+            <h1>Laporan Keuangan Internal</h1>
+            <p>Periode: {{ $bulan_nama }} {{ $tahun }}</p>
+        </div>
 
+        <div class="section-title">I. Rincian Pemasukan ZIS</div>
+        <table>
+            <thead>
+                <tr>
+                    <th width="5%" class="text-center">No</th>
+                    <th width="15%">Tanggal</th>
+                    <th>Keterangan</th>
+                    <th width="20%" class="text-right">Jumlah</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($pemasukan_zis as $index => $item)
+                    <tr>
+                        <td class="text-center">{{ $index + 1 }}</td>
+                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}</td>
+                        <td>
+                            <div class="font-bold">{{ $item->donatur->nama }}</div>
+                            <small class="text-gray">{{ $item->kategori_zis ?? 'ZIS' }} {{ $item->jenis_zis ? '- '.$item->jenis_zis : '' }}</small>
+                        </td>
+                        <td class="text-right">Rp {{ number_format($item->uang, 0, ',', '.') }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="4" class="text-center">Tidak ada data pemasukan.</td></tr>
+                @endforelse
+                <tr style="background-color: #ffffcc;">
+                    <td colspan="3" class="text-right font-bold">TOTAL PEMASUKAN</td>
+                    <td class="text-right font-bold">Rp {{ number_format($total_pemasukan, 0, ',', '.') }}</td>
+                </tr>
+            </tbody>
+        </table>
 
-            <h4>Rincian Pemasukan ZIS</h4>
-            <table>
-                <thead>
+        <div class="section-title">II. Rincian Penyaluran</div>
+        <table>
+             <thead>
+                <tr>
+                    <th width="5%" class="text-center">No</th>
+                    <th width="15%">Tanggal</th>
+                    <th>Keterangan</th>
+                    <th width="20%" class="text-right">Jumlah</th>
+                </tr>
+            </thead>
+            <tbody>
+                 @forelse($penyaluran as $index => $item)
                     <tr>
-                        <th width="5%">No</th>
-                        <th width="20%">Tanggal</th>
-                        <th>Keterangan</th>
-                        <th width="25%">Jumlah</th>
+                        <td class="text-center">{{ $index + 1 }}</td>
+                        <td>{{ \Carbon\Carbon::parse($item->tanggal_penyaluran)->format('d/m/Y') }}</td>
+                        <td>
+                            <div class="font-bold">{{ $item->penerima->nama }}</div>
+                            <small class="text-gray">{{ $item->kategori_penyaluran }} - {{ $item->jenis_penyaluran }}</small>
+                        </td>
+                        <td class="text-right">Rp {{ number_format($item->uang, 0, ',', '.') }}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    @forelse($pemasukan_zis as $index => $item)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d F Y') }}</td>
-                            <td>Penerimaan dari: {{ $item->donatur->nama }} ({{ $item->kategori_zis }} - {{ $item->jenis_zis }})</td>
-                            <td class="text-right">Rp {{ number_format($item->uang, 0, ',', '.') }}</td>
-                        </tr>
-                    @empty
-                        <tr><td colspan="4" style="text-align: center;">Tidak ada data pemasukan.</td></tr>
-                    @endforelse
-                    <tr>
-                        <td colspan="3" style="text-align: right; font-weight: bold;">TOTAL PEMASUKAN</td>
-                        <td class="text-right" style="font-weight: bold;">Rp {{ number_format($total_pemasukan, 0, ',', '.') }}</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h4>Rincian Penyaluran</h4>
-            <table>
-                 <thead>
-                    <tr>
-                        <th width="5%">No</th>
-                        <th width="20%">Tanggal</th>
-                        <th>Keterangan</th>
-                        <th width="25%">Jumlah</th>
-                    </tr>
-                </thead>
-                <tbody>
-                     @forelse($penyaluran as $index => $item)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ \Carbon\Carbon::parse($item->tanggal_penyaluran)->format('d F Y') }}</td>
-                            <td>Penyaluran kepada: {{ $item->penerima->nama }} ({{ $item->kategori_penyaluran }} - {{ $item->jenis_penyaluran }})</td>
-                            <td class="text-right">Rp {{ number_format($item->uang, 0, ',', '.') }}</td>
-                        </tr>
-                    @empty
-                        <tr><td colspan="4" style="text-align: center;">Tidak ada data penyaluran.</td></tr>
-                    @endforelse
-                    <tr>
-                        <td colspan="3" style="text-align: right; font-weight: bold;">TOTAL PENGELUARAN</td>
-                        <td class="text-right" style="font-weight: bold;">Rp {{ number_format($total_pengeluaran, 0, ',', '.') }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            
+                @empty
+                    <tr><td colspan="4" class="text-center">Tidak ada data penyaluran.</td></tr>
+                @endforelse
+                <tr style="background-color: #ffffcc;">
+                    <td colspan="3" class="text-right font-bold">TOTAL PENGELUARAN</td>
+                    <td class="text-right font-bold">Rp {{ number_format($total_pengeluaran, 0, ',', '.') }}</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="summary-box">
             <table class="summary-table">
-                <tr><td><b>Saldo Awal Bulan</b></td><td>: Rp {{ number_format($saldo_awal, 0, ',', '.') }}</td></tr>
-                <tr><td><b>Total Pemasukan</b></td><td>: Rp {{ number_format($total_pemasukan, 0, ',', '.') }}</td></tr>
-                <tr><td><b>Total Pengeluaran</b></td><td>: Rp {{ number_format($total_pengeluaran, 0, ',', '.') }}</td></tr>
-                <tr><td><b>SALDO AKHIR BULAN</b></td><td><b>: Rp {{ number_format($saldo_akhir, 0, ',', '.') }}</b></td></tr>
+                <tr>
+                    <td>Saldo Awal Bulan</td>
+                    <td class="text-right">Rp {{ number_format($saldo_awal, 0, ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td>Total Pemasukan</td>
+                    <td class="text-right text-success">+ Rp {{ number_format($total_pemasukan, 0, ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td>Total Pengeluaran</td>
+                    <td class="text-right text-danger">- Rp {{ number_format($total_pengeluaran, 0, ',', '.') }}</td>
+                </tr>
+                <tr style="border-top: 1px solid #ddd;">
+                    <td class="font-bold" style="padding-top: 10px;">SALDO AKHIR BULAN</td>
+                    <td class="text-right font-bold" style="padding-top: 10px;">Rp {{ number_format($saldo_akhir, 0, ',', '.') }}</td>
+                </tr>
             </table>
+        </div>
 
-
-            <div class="signature-block">
-                <div class="signature">
-                    <p>Mengetahui,</p>
-                    <p>Ketua Lazismu</p>
-                    <div class="name">(______________________)</div>
-                </div>
-                <div class="signature">
-                    <p>Surabaya, {{ date('d F Y') }}</p>
-                    <p>Dibuat oleh,</p>
-                    <div class="name">( {{ auth()->user()->name }} )</div>
-                </div>
+        <div class="signature-section">
+            <div class="signature-box">
+                <p>Mengetahui,<br>Ketua Lazismu</p>
+                <div class="signature-line">(______________________)</div>
             </div>
-
-        </main>
+            <div class="signature-box">
+                <p>Surabaya, {{ date('d F Y') }}<br>Dibuat oleh,</p>
+                <div class="signature-line">{{ auth()->user()->name }}</div>
+            </div>
+        </div>
     </div>
 
-    {{-- Script untuk otomatis membuka dialog print --}}
     <script>
-        window.print();
+        window.onload = function() {
+            window.print();
+        }
     </script>
 </body>
 </html>
